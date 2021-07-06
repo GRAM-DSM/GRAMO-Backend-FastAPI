@@ -16,6 +16,7 @@ from project.core.models.user import User_tbl
 from project.utils import create, delete
 from project.utils.auth import is_user, user_authentication, refresh_token_validation, token_check
 from project.utils.email import send_code, code_check
+from project.utils.notify import set_user_fcm_token
 
 from project.config import ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRE_MINUTES, ALGORITHM
 
@@ -69,6 +70,8 @@ async def authenticate_email_code(body: CheckCode):
 @router.post("/auth", status_code=status.HTTP_200_OK, tags=["auth"])
 async def login(body: Login, authorize: AuthJWT = Depends()):
     user = user_authentication(session=session, email=body.email, password=body.password)
+
+    set_user_fcm_token(session=session, token=body.token, email=body.email)
 
     access_expires_delta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     refresh_expires_delta = timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
