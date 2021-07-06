@@ -23,9 +23,13 @@ def get_user_fcm_tokens(session: Session, email: str):
 
 
 def send_message(tokens: list, title: str, body: str):
+    message = {
+        "title": title,
+        "body": body
+    }
+
     android_push_service.notify_multiple_devices(
         registration_ids=tokens,
-        message_title=title,
-        message_body=body,
+        data_message=message,
         click_action="notice"
     )
