@@ -27,11 +27,11 @@ async def send_code(code: str, address: str):
     session.quit()
 
 
-def code_check(email, code):
+def code_check(email: str, code: int):
     stored_code = Redis.get(email)
 
     if not stored_code:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="this email does not exist")
 
-    if stored_code != code:
+    if int(stored_code) != code:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="email and code does not match")
