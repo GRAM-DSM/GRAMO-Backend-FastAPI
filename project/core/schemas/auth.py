@@ -28,3 +28,4 @@ class CheckCode(BaseModel):
 class Login(BaseModel):
     email: EmailStr
     password: constr(min_length=5, max_length=20)
+    token: str

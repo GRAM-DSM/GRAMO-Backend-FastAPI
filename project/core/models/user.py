@@ -11,3 +11,4 @@ class User_tbl(Base):
     email_status = Column(Integer, nullable=False)
     name = Column(VARCHAR(10), nullable=False)
     major = Column(Enum("ANDROID","IOS","BACKEND","DESIGN"))
+    token = Column(VARCHAR(255))

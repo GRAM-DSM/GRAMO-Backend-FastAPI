@@ -13,6 +13,7 @@ from project.core.models.notice import Notice_tbl
 from project.utils import create, delete
 from project.utils.auth import token_check
 from project.utils.notice import get_notice_list, is_next_notice, is_notice, get_notice, is_own_notice
+from project.utils.notify import get_user_fcm_tokens, send_message
 
 
 router = APIRouter()
@@ -32,6 +33,9 @@ async def create_notice(body: CreateNotice, authorize: AuthJWT = Depends()):
         user_email=user_email,
         created_at=datetime.now(timezone("Asia/Seoul")).strftime("%Y-%m-%d %H:%M:%S")
     )
+
+    tokens = get_user_fcm_tokens(session=session, email=user_email)
+    send_message(tokens=tokens, title="새로운 공지사항", body=body.title)
 
     return {
         "message": "success"
