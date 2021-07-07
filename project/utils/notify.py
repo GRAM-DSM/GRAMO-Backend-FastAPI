@@ -6,8 +6,7 @@ from project.core.models.user import User_tbl
 from project.config import ANDROID_APIKEY, IOS_APIKEY
 
 
-android_push_service = FCMNotification(ANDROID_APIKEY)
-ios_push_service = FCMNotification(IOS_APIKEY)
+push_service = FCMNotification(APIKEY)
 
 
 def set_user_fcm_token(session: Session, token: str, email: str):
@@ -29,7 +28,7 @@ def send_message(tokens: list, title: str, body: str):
         "click_action": "notice"
     }
 
-    android_push_service.notify_multiple_devices(
+    push_service.notify_multiple_devices(
         registration_ids=tokens,
         data_message=message
     )
