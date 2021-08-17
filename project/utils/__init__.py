@@ -1,5 +1,4 @@
-from sqlalchemy.orm import Session
-
+from sqlalchemy.orm.session import Session
 
 def create(cls, session: Session, auto_commit=True, **kwargs):
     obj = cls()

@@ -1,8 +1,8 @@
 from fastapi import HTTPException, status
 
 from sqlalchemy.orm.query import Query
+from sqlalchemy.orm.session import Session
 
-from project.core.models import Session
 from project.core.models.notice import Notice_tbl
 from project.core.models.user import User_tbl
 

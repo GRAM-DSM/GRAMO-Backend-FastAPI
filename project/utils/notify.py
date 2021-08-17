@@ -1,6 +1,7 @@
 from pyfcm import FCMNotification
 
-from project.core.models import Session
+from sqlalchemy.orm.session import Session
+
 from project.core.models.user import User_tbl
 
 from project.config import APIKEY
