@@ -3,3 +3,7 @@ venv/
 __pycache__
 .DS_Store
 project/config.py
+access.log
+error.log
+gunicorn-access.log
+gunicorn-error.log
