@@ -14,7 +14,7 @@ from project.core.models import session_scope, Redis
 from project.core.models.user import User_tbl
 
 from project.utils import create, delete
-from project.utils.auth import is_user, user_authentication, refresh_token_validation, token_check
+from project.utils.auth import is_user, user_authentication, refresh_token_validation, token_check, init_withdrawal
 from project.utils.email import send_code, code_check
 from project.utils.notify import set_user_fcm_token
 
@@ -143,6 +143,7 @@ async def withdrawal(authorize: AuthJWT = Depends()):
 
         email = authorize.get_jwt_subject()
         user = is_user(session=session, email=email, return_it=True)
+        init_withdrawal(session=session, email=email)
         delete(session=session, del_thing=user)
 
         return {

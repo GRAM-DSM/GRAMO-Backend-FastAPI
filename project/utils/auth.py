@@ -5,10 +5,16 @@ from fastapi_jwt_auth.exceptions import AccessTokenRequired, RefreshTokenRequire
 
 import bcrypt
 
+from sqlalchemy import or_
 from sqlalchemy.orm.session import Session
 
 from project.core.models import Redis
 from project.core.models.user import User_tbl
+from project.core.models.notice import Notice_tbl
+from project.core.models.homework import Homework_tbl
+from project.core.models.picu import Picu_tbl
+
+from project.utils import delete
 
 
 def is_user(session: Session, email: str, return_it = False):
@@ -62,3 +68,14 @@ def token_check(authorize: AuthJWT, type: str):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="refresh token required")
     except JWTDecodeError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="token has expired")
+
+
+def init_withdrawal(session: Session, email: str):
+    notices = session.query(Notice_tbl).filter(Notice_tbl.user_email == email).all()
+    homeworks = session.query(Homework_tbl)\
+        .filter(or_(Homework_tbl.teacher_email == email, Homework_tbl.student_email == email)).all()
+    picus = session.query(Picu_tbl).filter(Picu_tbl.user_email == email).all()
+
+    delete(session=session, del_thing=notices)
+    delete(session=session, del_thing=homeworks)
+    delete(session=session, del_thing=picus)
