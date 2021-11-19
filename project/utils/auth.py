@@ -71,11 +71,12 @@ def token_check(authorize: AuthJWT, type: str):
 
 
 def init_withdrawal(session: Session, email: str):
-    notices = session.query(Notice_tbl).filter(Notice_tbl.user_email == email).all()
-    homeworks = session.query(Homework_tbl)\
-        .filter(or_(Homework_tbl.teacher_email == email, Homework_tbl.student_email == email)).all()
-    picus = session.query(Picu_tbl).filter(Picu_tbl.user_email == email).all()
+    for notice in session.query(Notice_tbl).filter(Notice_tbl.user_email == email).all():
+        session.delete(notice)
 
-    delete(session=session, del_thing=notices)
-    delete(session=session, del_thing=homeworks)
-    delete(session=session, del_thing=picus)
+    for homework in session.query(Homework_tbl)\
+        .filter(or_(Homework_tbl.teacher_email == email, Homework_tbl.student_email == email)).all():
+        session.delete(homework)
+
+    for picu in session.query(Picu_tbl).filter(Picu_tbl.user_email == email).all():
+        session.delete(picu)
